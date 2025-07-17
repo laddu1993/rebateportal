@@ -1,0 +1,31 @@
+<!-- DELETE ITEM CONFIRMATION POPUP (pops up when the user tries to remove an item inside of a rebate)-->
+
+<div class="inner-container inner-container__title-wo-border">
+    <div class="left-block">
+        <h1>{{headerData}}</h1>
+    </div>
+    <div class="right-block">
+        <button (click)="closeDialogPopUp()" style="cursor: pointer;"><img [src]="assetUrl + 'close-icon.svg'" alt="" style="cursor: pointer;" (click)="closeDialogPopUp()"></button>
+    </div>
+</div>
+
+<div class="popup-content popup-content__small row gy-4">
+
+    <div class="col-12">
+        <h4>{{this.message}}</h4>
+        <div class="spacer-12"></div>
+       
+    </div>
+    
+    <div class="col-12 d-flex justify-content-end" *ngIf="isSubmit != '3'">
+        <div class="btn-grp">
+            <button type="button" class="btn btn__secondary" (click)="closeDialogPopUp()">Close</button>
+        </div>
+    </div>
+    <div class="col-12 d-flex justify-content-end" *ngIf="isSubmit == '3'">
+        <div class="btn-grp">
+            <button type="button" class="btn btn__secondary" (click)="noClick()">No</button>
+            <button type="button" class="btn btn__primary" (click)="yesClick()">Yes</button>
+        </div>
+    </div>
+</div>

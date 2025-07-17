@@ -1,0 +1,28 @@
+<!-- DELETE REBATE CONFIRMATION POPUP -->
+
+<div class="inner-container inner-container__title-wo-border">
+    <div class="left-block">
+        <h1>Delete Rebate?</h1>
+    </div>
+    <div class="right-block">
+        <button (click)="closeDialogPopUp()" style="cursor: pointer;"><img src="../../../assets/close-icon.svg" alt="" style="cursor: pointer;" (click)="closeDialogPopUp()"></button>
+    </div>
+</div>
+
+<div class="popup-content popup-content__small row gy-4">
+
+    <div class="col-12">
+        <h4>Are you sure you want to delete this Item?</h4>
+        <div class="spacer-12"></div>
+        <p>{{customerName}}</p>
+        <!--<p>Status : <span class="status status__{{statusStyleClass}}">{{rebateStatus}}</span></p>-->
+    </div>
+    
+    <div class="col-12 d-flex justify-content-end">
+        <div class="btn-grp">
+            <button type="button" class="btn btn__secondary" (click)="closeDialogPopUp()">Cancel</button>
+            <button type="button" class="btn btn__primary" (click)="deleteRebateData()">Delete</button>
+        </div>
+    </div>
+
+</div>

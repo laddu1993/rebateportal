@@ -1,0 +1,222 @@
+<!-- header -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand"><img [src]="assetUrl + 'logo.svg'" alt=""> &nbsp;<b *ngIf="!isUATMode" style="color: #273a60;">{{envName}}</b></a>
+    </div>
+</nav>
+<!-- end of header -->
+
+<div class="pg-outer-container">
+    <div class="content-container content-container__top-zero-padding content-container__full-height">
+        <div class="inner-container inner-container__title rebate-wrp">
+            <div class="rbt-title-block">
+                <div class="flbx-sp-12">
+                    <h1>{{customerName}} [{{fleetID}}]</h1>
+                    <span class="status status__{{statusStyleClass}}" *ngIf="rebateType !== 'National Account'">{{rebateSatus == 'NotCurrentlyEnrolled' ? 'Not Currently Enrolled' : rebateSatus}}</span>
+                </div>
+                <h4>{{rebateType}}</h4>
+            </div>
+            <div class="btn-grp">
+                <a type="button" class="btn btn__secondary" (click)="closeClick()">Close</a><!-- [routerLink]="['/myrebates']"
+                [queryParams]="{ acct:account }"-->
+                <button type="button" class="btn btn__primary" (click)="saveRebate('0')" 
+                    [hidden]="isVisible" [disabled]="rebateItemCount <= 0 || isSaving" *ngIf="rebateSatus !== 'Waiting' && rebateSatus !== 'Submitted' && rebateSatus !== 'Completed'">Save Draft</button>
+                <button type="button" class="btn btn__primary" (click)="saveRebate('1')"
+                    [hidden]="isVisibleSubmit" [disabled]="rebateItemCount <= 0 || isSaving" *ngIf="rebateSatus !== 'Submitted' && rebateSatus !== 'Completed'">Submit</button>
+            </div>
+        </div>
+
+        <div class="row gx-4">
+            <div class="col-md-10">
+                <div class="inner-container inner-container__title-wo-border order-detail-wrp">
+                    <div class="left-block">
+                        <h1>Rebate Details</h1>
+                        <div class="counterbox row">
+                            <div class="col flbx-sp-12">
+                                <p>Total Rebate</p>
+                                <h1>{{totalRebate | currency:'USD':'symbol':'1.2-2'}}</h1>
+                            </div>
+                            <div class="col flbx-sp-12"  *ngIf="!allowedRoles.includes(rebateType) && rebateType !== 'National Account'">
+                                <!-- [hidden]="showTotalPointsDiv"-->
+                                <p>Total Points</p>
+                                <h1 *ngIf="isProSawItemContain == true">{{totalPoints}}*</h1>
+                                <h1 *ngIf="isProSawItemContain == false">{{totalPoints}}</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="right-block">
+                        <button type="button" class="btn btn__pl-wicon" (click)="OpenAdditem()"
+                            [hidden]="isVisible" *ngIf="rebateSatus !== 'Waiting' && rebateSatus !== 'Submitted' && rebateSatus !== 'Completed'"><img [src]="assetUrl + 'plus-icon.svg'" class="bt-icon" alt="Add Item">Add
+                            Item</button>
+                        <mat-form-field appearance="outline" class="searchip" subscriptSizing="dynamic">
+                            <input matInput placeholder="Search" [ngModel]="searchText"
+                                (ngModelChange)="applyFilter($event)">
+                            <img [src]="assetUrl + 'search-icon.svg'" alt="">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <!-- Indeterminate Progress Bar -->
+                
+                <div class="responsive-table-wrp">
+                    <app-progress-bar></app-progress-bar>
+                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+                        <!-- REBATE ITEMS TABLE -->
+                         <!-- Description Column -->
+                         <ng-container matColumnDef="description">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
+                            <td mat-cell *matCellDef="let element">
+                                <span class="label-item">Description</span>
+                                <b>{{element.description}}</b><br><span class="label-item">SKU</span>{{element.sku}}<br><span class="label-item">Serial</span>{{element.serial}}
+                                <button  (click)="toggleExpand($event)" class="btn btn__ico-btn btn__ico-btn__lg btn__expand" 
+                                matTooltip="expand" [matTooltipPosition]="'after'" matTooltipClass="custom-tooltip"><mat-icon>keyboard_arrow_down</mat-icon>
+                              </button>
+                            </td>
+                        </ng-container>
+                        <!-- Points Column -->
+                        <ng-container matColumnDef="points" *ngIf="rebateType !== 'National Account'">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Points </th>
+                            <td mat-cell *matCellDef="let element">
+                                <span class="label-item">Points</span>
+                                <span> {{element.points}} </span>
+                            </td>
+                        </ng-container>
+
+                        <!-- Retail Column -->
+                        <ng-container matColumnDef="retail">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Retail </th>
+                            <td mat-cell *matCellDef="let element">
+                                <span class="label-item">Retail</span>
+                                <span>{{element.retail | currency:'USD':'symbol':'1.2-2'}}</span>
+                            </td>
+                        </ng-container>
+
+                        <!-- Cost Column -->
+                        <ng-container matColumnDef="cost">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Cost </th>
+                            <td mat-cell *matCellDef="let element">
+                                <span class="label-item">Cost</span> 
+                                <span> {{element.cost | currency:'USD':'symbol':'1.2-2'}}</span>
+                            </td>
+                        </ng-container>
+
+                        <!-- Discount Column -->
+                        <ng-container matColumnDef="discount">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Discount % </th>
+                            <td mat-cell *matCellDef="let element;  let d = index;">
+                                <span class="label-item">Discount %</span>
+                                <mat-form-field appearance="outline" class="searchip" subscriptSizing="dynamic"
+                                    style="width: 75px;">
+                                    <input
+                                    matInput
+                                    type="number"
+                                    min="0"
+                                    max="25"
+                                    [id]="'discount_' + (currentPage * pageSize + d)"
+                                    [(ngModel)]="element.discount"
+                                    (change)="calculateRebate($event, element.retail, d, element)"
+                                    [readonly]="rebateType == 'Bid Assist' ? false : true"
+                                    />
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+
+                        <!-- Offer Column -->
+                        <ng-container matColumnDef="offer">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Offer </th>
+                            <td mat-cell *matCellDef="let element; let o = index;" id="offer_{{o}}">
+                                <span class="label-item">Offer</span>
+                                {{element.offer |
+                                currency:'USD':'symbol':'1.2-2'}} </td><!-- | currency:'USD':true-->
+                        </ng-container>
+
+                        <!-- Rebate Column -->
+                        <ng-container matColumnDef="rebate">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Rebate </th>
+                            <td mat-cell *matCellDef="let element;  let r = index;" id="rebate_{{r}}">
+                                <span class="label-item">Rebate</span>
+                                {{element.rebate
+                                | currency:'USD':'symbol':'1.2-2'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef> </th>
+                            <td mat-cell *matCellDef="let element; let j = index;">
+                                <button [hidden]="isVisible" type="button" class="btn btn__ico-btn btn__ico-btn__sm btn__remove mobile_view_delete" matTooltip="Delete"
+                                    (click)="deleteItem(element.ID, j, element.description, element.sku, element.serial)"
+                                    [matTooltipPosition]="'before'" matTooltipClass="custom-tooltip" *ngIf="rebateSatus !== 'Waiting' && rebateSatus !== 'Submitted' && rebateSatus !== 'Completed'">
+                                    <img [src]="assetUrl + 'remove-icon.svg'" class="bt-icon" alt="">
+                                </button>
+                                <button type="button" class="btn btn__remove" matTooltip="Delete"
+                                    [matTooltipPosition]="'before'" matTooltipClass="custom-tooltip">
+                                    Delete
+                                </button>
+                            </td>
+                        </ng-container>
+                        <ng-container *matNoDataRow>
+                            <td class="mat-cell" [attr.colspan]="rebateType !== 'National Account' ? displayedColumns.length : NATdisplayedColumns.length">
+                                <div class="col-12">
+                                    <div class="row h-100 w-100 p-3 align-items-center no-data-block">
+                                        <div class="col-12">
+                                            <img src="assets/no-data-icon-sm.svg" alt="">
+                                            <h3>No records found</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="rebateType !== 'National Account' ? displayedColumns : NATdisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: rebateType !== 'National Account' ? displayedColumns : NATdisplayedColumns;"></tr>
+                    </table>
+                </div>
+
+                <app-skeleton-loader *ngIf="isLoadingPopup" [rowCount]="5"></app-skeleton-loader>
+                <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
+                    aria-label="Select page">
+                </mat-paginator>
+
+            </div>
+            <div class="col-md-2">
+                <div class="inner-container inner-container__title-small-wo-border">
+                    <h3>Notes</h3>
+                    <button type="button" class="btn btn__pl-wicon" (click)="OpenAddnotes()"><img
+                            [src]="assetUrl + 'plus-icon.svg'" class="bt-icon" alt="">Add</button>
+                </div>
+                <div class="notes-wrapper">
+
+                    <div class="notes-box" *ngIf="notes != ''">
+                        <div class="note-title">
+                            <h4></h4>
+                            <p>{{notes}}</p>
+                        </div>
+                        <!--<div class="note-actions">
+                            <img [src]="assetUrl + 'edit-icon.svg'" alt="">
+                            <img [src]="assetUrl + 'delete-icon.svg'" alt="">
+                        </div>-->
+                    </div>
+                    <!--<div class="notes-box">
+                    <div class="note-title">
+                        <h4>A long note title that takes up two lines.</h4>
+                        <p>xxxx-xx-xx</p>
+                    </div>
+                    Sed faucibus dolor ut lorem ultricies, ac ferme.dolor ut.
+                    <div class="note-actions">
+                        <img src="../../../assets/edit-icon.svg" alt="">
+                        <img src="../../../assets/delete-icon.svg" alt="">
+                    </div>
+                </div>-->
+
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 10px;" *ngIf="isProSawItemContain == true">
+            <div class="col-md-10">
+                <div class="hint" role="alert">
+                    <h3>*</h3> Total points reflects a qualification for special program.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<app-additem (rebateItemCreated)="onRebateItemAdded($event)" ></app-additem>-->

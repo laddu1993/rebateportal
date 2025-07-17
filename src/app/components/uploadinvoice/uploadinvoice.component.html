@@ -1,0 +1,38 @@
+<!-- UPLOAD INVOICE POPUP -->
+
+
+<div class="inner-container inner-container__title-wo-border">
+    <div class="left-block">
+        <h1>Upload Invoice</h1>
+    </div>
+    <div class="right-block">
+        <button (click)="closeDialogPopUp()" style="cursor: pointer;"><img [src]="assetUrl + 'close-icon.svg'" alt="Close" style="cursor: pointer;" (click)="closeDialogPopUp()"></button>
+    </div>
+</div>
+
+<div class="popup-content popup-content__small row gy-4">
+    <div class="col-12">
+       <p>Please upload a copy of the invoice in PDF format and click "Submit" to complete the process.</p>
+       <div class="spacer-12"></div>
+       <div class="fileupload">
+          <img [src]="assetUrl + 'upload-icon.svg'" alt="Upload">
+          <div class="txt-wrap">
+             <b>{{fileName || "No file uploaded yet."}}</b>
+             <p>Drag and drop files or <a href="" (click)="$event.preventDefault(); fileUpload.click()">Browse</a></p>
+             <h6>Maximum file size 2MB</h6>
+          </div>
+       </div>
+       <input type="file" class="file-input" style="display: none;" accept="image/*, application/pdf" capture="environment" 
+       (change)="onFileSelected($event)" #fileUpload>
+       <!-- Display the error message if file size exceeds 2MB -->
+       <div *ngIf="errorMessage" class="error-message" style="color: red; margin-top: 8px;">
+          {{ errorMessage }}
+       </div>
+    </div>
+    <div class="col-12 d-flex justify-content-end">
+       <div class="btn-grp">
+          <button type="button" class="btn btn__secondary" (click)="ClearData()">Clear</button>
+          <button type="button" class="btn btn__primary" (click)="onSubmit()" [disabled]="!fileName">Submit</button>
+       </div>
+    </div>
+ </div>

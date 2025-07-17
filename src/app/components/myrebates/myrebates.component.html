@@ -1,0 +1,198 @@
+<!-- header -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand"><img src="assets/logo.svg" alt=""> &nbsp;<b *ngIf="!isUATMode" style="color: #273a60;">{{envName}}</b></a>
+  </div>
+</nav>
+<!-- end of header -->
+
+<div class="pg-outer-container container-wrp">
+  <!-- Indeterminate Progress Bar -->
+
+
+
+  <div class="content-container content-container__top-zero-padding content-container__full-height">
+    <div class="row">
+      <div class="col-12">
+        <div class="inner-container inner-container__title-wo-border">
+          <div class="left-block">
+            <h1>My Rebates</h1>
+            <div class="btn-grp">
+              <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [(value)]="selectedToggleValue">
+                <mat-button-toggle value="inprogress" (change)="applyInprogressFilter()">In Progress</mat-button-toggle>
+                <mat-button-toggle value="completed"
+                  (change)="applyCompletedFilter('completed')">Completed</mat-button-toggle>
+              </mat-button-toggle-group>
+              <div class="selector_container">
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <mat-select [(value)]="filterType" (selectionChange)="onSelectChange($event)">
+                    <mat-option value="">All Types</mat-option>
+                    <mat-option value="Fleet">Fleet</mat-option>
+                    <mat-option value="Military/First Responder">Military/First Responder</mat-option>
+                    <mat-option value="Bid Assist">Bid Assist</mat-option>
+                    <!-- Conditionally show "National Accounts" when production is false -->
+                    <mat-option value="National Account">National Accounts</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <!--<mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <mat-date-range-input [rangePicker]="picker">
+                    <input matStartDate placeholder="Start date" #dateRangeStart>
+                    <input matEndDate placeholder="End date" #dateRangeEnd (dateChange)="dateRangeChange(dateRangeStart, dateRangeEnd)">
+                  </mat-date-range-input>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker">    
+                      <mat-icon matDatepickerToggleIcon>
+                      <img src="../../../assets/calendar-icon.svg">
+                      </mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>  -->
+                <button type="button" class="btn btn__ico-btn btn__ico-btn__lg" (click)="resetFilter()"
+                  matTooltip="Reset Filters" [matTooltipPosition]="'after'" matTooltipClass="custom-tooltip"><img
+                    src="assets/reset-icon.svg" class="bt-icon" alt=""></button>
+              </div>
+              
+            </div>
+          </div>
+          <div class="right-block">
+            <button type="button" class="btn btn__pl-wicon btn__addnew" (click)="OpenNewrebate()"><img src="assets/plus-icon.svg"
+                class="bt-icon" alt="">New Rebate</button>
+            <mat-form-field appearance="outline" class="searchip" subscriptSizing="dynamic">
+              <input matInput placeholder="Search" [(ngModel)]="searchText" (ngModelChange)="applyFilter($event)">
+              <img src="assets/search-icon.svg" alt="">
+            </mat-form-field>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!--<mat-spinner *ngIf="isLoading" class="loader"></mat-spinner>-->
+    <!--<div class="paginator__mob-container">
+      <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page">
+      </mat-paginator>
+    </div>-->
+    <div class="responsive-table-wrp">
+      <app-progress-bar></app-progress-bar>
+      
+      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" (matSortChange)="customSort($event)"
+       >
+
+        <!--- MY REBATES TABLE -->
+
+        <!-- Customer Info Column -->
+        <ng-container matColumnDef="customerinfo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Customer Info </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="mobview__firstrow">
+            <span class="mobview__customer__info">
+            <span class="label-item">Customer Info </span>
+            <a (click)="updateData(element.rebate_id, element.status)"
+              style="cursor: pointer;">{{ sanitizeCustomer(element.customer) }}<span class="status__wrapper status__{{ element.status == 'Draft' ? 'draft' : (element.status == 'Submitted' ? 'submitted': 'waiting')}}"> <a (click)="updateData(element.rebate_id, element.status)"
+                style="cursor: pointer;"> {{element.status}} 
+              </a></span></a> 
+            
+            <button type="button" (click)="toggleExpand($event)" class="btn btn__ico-btn btn__ico-btn__lg btn__expand" 
+              matTooltip="expand" [matTooltipPosition]="'after'" matTooltipClass="custom-tooltip"><mat-icon>keyboard_arrow_down</mat-icon>
+            </button>
+          </span>
+        
+          <span class="mobview__customer__status mobview__customer__rebate">
+            <span class="label-item">Rebate</span>
+            <a (click)="updateData(element.rebate_id, element.status)"
+              style="cursor: pointer;"> {{element.rebate | currency:'USD':'symbol':'1.2-2'}}
+            </a>
+          </span>
+          </span>
+            </td>
+        </ng-container>
+
+        <!-- Date Created Column -->
+        <ng-container matColumnDef="datecreated">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Date Created </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="label-item"> Date Created  </span>
+            <a (click)="updateData(element.rebate_id, element.status)"
+              style="cursor: pointer;">{{element.datecreated | date:'MM-dd-yyyy'}} </a> </td><!-- | date:'yyyy-dd-MM'-->
+        </ng-container>
+
+        <!-- Ref No Column -->
+        <ng-container matColumnDef="refno">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Ref No. </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="label-item">Ref No. </span>
+            <a (click)="updateData(element.rebate_id, element.status)"
+              style="cursor: pointer;"> {{element.reference_no}} </a></td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+          <td mat-cell *matCellDef="let element" class="element__mobile-hide">
+            <span class="label-item">Status</span>
+            <a (click)="updateData(element.rebate_id, element.status)"
+              style="cursor: pointer;"> {{element.status}} </a></td>
+        </ng-container>
+
+        <!-- Type Column -->
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="label-item">Type</span>
+            <a (click)="updateData(element.rebate_id, element.status)"
+              style="cursor: pointer;"> {{element.type}} </a></td>
+        </ng-container>
+
+        <!-- Rebate Column -->
+        <ng-container matColumnDef="rebate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Rebate </th>
+          <td mat-cell *matCellDef="let element" class="element__mobile-hide">
+            <span class="label-item">Rebate</span>
+            <a (click)="updateData(element.rebate_id, element.status)"
+              style="cursor: pointer;"> {{element.rebate | currency:'USD':'symbol':'1.2-2'}} </a></td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef> </th>
+          <td mat-cell *matCellDef="let element; let j = index;">
+            <button *ngIf="selectedToggleValue == 'inprogress' && element.status != 'Submitted'" type="button" class="btn btn__ico-btn btn__ico-btn__sm" matTooltip="Delete"
+              (click)="deleteRebate(j, element.rebate_id, element.customer, element.status )"
+              [matTooltipPosition]="'before'" matTooltipClass="custom-tooltip"><img src="assets/remove-icon.svg"
+                class="bt-icon" alt=""></button>
+            <button *ngIf="selectedToggleValue == 'inprogress' && element.status != 'Submitted'" type="button" class="btn btn__remove" matTooltip="Delete"
+                (click)="deleteRebate(j, element.rebate_id, element.customer, element.status )"
+                [matTooltipPosition]="'before'" matTooltipClass="custom-tooltip">
+                Delete
+            </button>
+          </td>
+        </ng-container>
+        <ng-container *matNoDataRow>
+          <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+            <div class="col-12">
+              <div class="row h-100 w-100 p-3 align-items-center no-data-block">
+                <div class="col-12">
+                  <img src="assets/no-data-icon-sm.svg" alt="">
+                  <h3>No records found</h3>
+                </div>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+    <app-skeleton-loader *ngIf="isLoadingPopup" [rowCount]="5"></app-skeleton-loader>
+    <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page">
+    </mat-paginator>
+
+
+    <!-- Status examples -->
+
+    <!-- <span class="status status__draft">Draft</span>
+  <span class="status status__waiting">Waiting</span>
+  <span class="status status__submitted">Submitted</span> -->
+
+    <!-- remove item button -->
+
+    <!-- <button type="button" class="btn btn__ico-btn btn__ico-btn__sm" matTooltip="Remove Item" [matTooltipPosition]="'before'" matTooltipClass="custom-tooltip"><img src="../../../assets/remove-icon.svg" class="bt-icon" alt=""></button> -->
+
+  </div>
+</div>

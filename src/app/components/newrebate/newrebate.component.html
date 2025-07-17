@@ -1,0 +1,685 @@
+<!-- ADD REBATE POPUP(Opens when user clicks on 'Add Rebte' button on 'My Rebates' Page) -->
+
+<div class="inner-container inner-container__title-wo-border">
+    <div class="left-block">
+        <h1>New Rebate</h1>
+    </div>
+    <div class="right-block">
+        <button (click)="closeDialogPopUp()" style="cursor: pointer;"><img [src]="assetUrl + 'close-icon.svg'" alt=""></button>
+    </div>
+</div>
+
+
+<div class="popup-content popup-content__medium row gy-4">
+    <div class="col-12">
+        <div class="form-field-wrap add-top-sec"
+            [ngStyle]="{'border-bottom': selectedRebatePgm == 'National Account' ? 'none' : '1px solid #D2D2D1 important'}">
+            <mat-label>Rebate Program</mat-label>
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-select value="Fleet" [(value)]="selectedRebatePgm"
+                    (valueChange)="changeRebatePgm(selectedRebatePgm)">
+                    <mat-option value="Fleet">Fleet</mat-option>
+                    <mat-option value="Bid Assist">Bid Assist</mat-option>
+                    <mat-option value="Military/First Responder">Military/First Responder</mat-option>
+                    <!-- Conditionally show "National Accounts" when production is false -->
+                    <!-- <mat-option value="National Account" *ngIf="!isProduction">National Accounts</mat-option> -->
+                    <mat-option value="National Account">National Accounts</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <!-- National Accounts Dropdown -->
+        <div class="col-12" *ngIf="selectedRebatePgm == 'National Account'">
+            <div class="form-field-wrap add-top-sec-na">
+                <mat-label>National Accounts</mat-label>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-select placeholder="Select Program" [(value)]="selectedNationalAccount" (valueChange)="changeNationalAccount($event)">
+                        <mat-option *ngFor="let option of natinalAccntOptions" [value]="option">
+                            {{ option.national_account_name }}
+                        </mat-option>
+                    </mat-select>                                       
+                    <!--<mat-select placeholder="Select Program" [(value)]="selectedNationalAccountId"
+                        (valueChange)="changeNationalAccount();">
+                        <mat-option value="13465">The Ground Guys</mat-option>
+                        <mat-option value="14099">North American Training Solutions</mat-option>
+                        <mat-option value="14315">National Association of Landscapre Professionals</mat-option>
+                        <mat-option value="14658">US Lawn</mat-option>
+                        <mat-option value="26927">James River Ground Management</mat-option>
+                        <mat-option value="26928">Clippers, LLC</mat-option>
+                        <mat-option value="29889">BrightView</mat-option>
+                        <mat-option value="65780">Yellowstone</mat-option>
+                    </mat-select>-->
+                </mat-form-field>
+            </div>
+        </div>
+
+        <!-- End of National Accounts Dropdown -->
+        <div class="col-12" ngClass="existing-customer-tab" *ngIf="selectedRebatePgm != 'National Account'">
+            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [(value)]="selectedToggleValue">
+                <mat-button-toggle value="existingCustomer" (click)=toggleDisplayDiv()>My Customers</mat-button-toggle>
+                <mat-button-toggle value="newCustomer" (click)=toggleDisplayNewCustomerDiv()>New
+                    Customer</mat-button-toggle>
+                <mat-button-toggle value="externalCustomer" (click)=toggleDisplayExternalCustomerDiv()>Search Externally</mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+    </div>
+    <div class="col-12 mt-0"
+        *ngIf="(selectedRebatePgm != 'National Account' && selectedToggleValue == 'existingCustomer') || (selectedRebatePgm == 'National Account' && selectedNationalAccountId != '')" [ngStyle]="{ 'margin-bottom': isEmptySearch ? '-30px' : '0' }">
+        <div class="sub-container sub-container__title">
+            <div class="left-block">
+                <h3>Customers</h3>
+            </div>
+            <div class="right-block d-flex align-items-center flex-wrap justify-content-start">
+                <mat-form-field appearance="outline" class="searchip">
+                    <input matInput placeholder="Search" id="vlSearchText" [(ngModel)]="searchText" (ngModelChange)="applyFilter($event)">
+                    <img [src]="assetUrl + 'search-icon.svg'" alt="">
+                </mat-form-field>                  
+            </div>
+        </div>
+    </div>
+
+    <form [formGroup]="searchForm" [ngClass]="{ 'hidden-form': selectedToggleValue !== 'externalCustomer' }">
+        <div class="col-12 mt-0 external-customer-search" *ngIf="(selectedToggleValue == 'externalCustomer')">
+            <div class="sub-container sub-container__title">
+                <div class="left-block">
+                    <h3>Search Externally</h3>
+                </div>
+            </div>
+            <div class="no-results-form responsive-container">
+                <div class="form-group responsive-form">
+                    <div class="branch-city-container">
+                        <div class="form-row">
+                            <!-- State Field (Common for both conditions) -->
+                            <mat-form-field appearance="outline" class="searchip" subscriptSizing="dynamic">
+                                <mat-select placeholder="Select State *" formControlName="state">
+                                    <mat-option *ngFor="let state of statesList" [value]="state.code">{{ state.name }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <!-- Error Message -->
+                            <div *ngIf="searchForm.get('state')?.invalid && (searchForm.get('state')?.touched || searchForm.get('state')?.dirty)" class="error-message">
+                                State is required.
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="branch-city-container">
+                        <div class="form-row" *ngIf="showMilitaryFields">
+                            <mat-form-field appearance="outline" class="searchip" subscriptSizing="dynamic">
+                                <input matInput placeholder="First Name" formControlName="firstName">
+                            </mat-form-field>
+                        </div>
+                        <div class="form-row" *ngIf="showMilitaryFields">
+                            <mat-form-field appearance="outline" class="searchip" subscriptSizing="dynamic">
+                                <input matInput placeholder="Last Name" formControlName="lastName">
+                            </mat-form-field>
+                        </div>
+                        <div class="form-row">
+                            <mat-form-field appearance="outline" class="searchip" subscriptSizing="dynamic">
+                                <input matInput placeholder="Email Address" formControlName="email">
+                            </mat-form-field>
+                        </div>
+                    </div>
+    
+                    <div class="branch-city-container" *ngIf="!showMilitaryFields">
+                        <div class="form-row">
+                            <mat-form-field appearance="outline" class="searchip" subscriptSizing="dynamic">
+                                <input matInput placeholder="Company Name" formControlName="companyName">
+                            </mat-form-field>
+                        </div>
+                        <div class="form-row">
+                            <mat-form-field appearance="outline" class="searchip" subscriptSizing="dynamic">
+                                <input matInput placeholder="Zip" formControlName="zip">
+                            </mat-form-field>
+                        </div>
+                    </div>
+    
+                    <!-- Move button inside the main div -->
+                    <div class="form-row">
+                        <button type="submit" class="btn btn__primary responsive-button" [disabled]="searchForm.invalid" (click)="searchCustomers()">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>    
+        
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="col-12 mt-1">
+            <div class="row gy-2 pb-3">
+
+                <!-- Existing Customer Table -->
+                <div class="col-12" *ngIf="selectedToggleValue == 'existingCustomer'">
+                    
+                    <div *ngIf="isEmptySearch && selectedRebatePgm === 'National Account'" class="no-results-form responsive-container">
+                        <div class="form-group text-center">
+                            <h3>You can still submit a rebate claim request by entering the details below.</h3>
+                        </div>
+                        <form [formGroup]="rebateForm">
+                            <div class="form-group responsive-form">
+                                <div class="branch-city-container">
+                                    <div class="form-row">
+                                        <mat-label>Customer Name*</mat-label>
+                                        <mat-form-field appearance="outline" class="responsive-field">
+                                            <input matInput placeholder="Customer Name" formControlName="customerName" autocomplete="off" required>
+                                        </mat-form-field>
+                                        <div *ngIf="rebateForm.get('customerName')?.invalid && (rebateForm.get('customerName')?.touched || rebateForm.get('customerName')?.dirty)" 
+                                             class="error-message">
+                                            {{ customerNameErrorMessage }}
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <mat-label>Branch ID*</mat-label>
+                                        <mat-form-field appearance="outline" class="responsive-field">
+                                            <input matInput placeholder="Branch ID" formControlName="branchID" autocomplete="off" required>
+                                        </mat-form-field>
+                                        <div *ngIf="rebateForm.get('branchID')?.invalid && (rebateForm.get('branchID')?.touched || rebateForm.get('branchID')?.dirty)" 
+                                             class="error-message">
+                                            {{ branchIDErrorMessage }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <mat-label>Street*</mat-label>
+                                    <mat-form-field appearance="outline" class="responsive-field">
+                                        <input matInput placeholder="Street" formControlName="streetName" autocomplete="off" required>
+                                    </mat-form-field>
+                                    <div *ngIf="rebateForm.get('streetName')?.invalid && (rebateForm.get('streetName')?.touched || rebateForm.get('streetName')?.dirty)" 
+                                         class="error-message">
+                                        {{ streetNameErrorMessage }}
+                                    </div>
+                                </div>
+                                <div class="branch-city-container">
+                                    <div class="form-row">
+                                        <mat-label>City*</mat-label>
+                                        <mat-form-field appearance="outline" class="responsive-field">
+                                            <input matInput placeholder="City" formControlName="cityName" autocomplete="off" required>
+                                        </mat-form-field>
+                                        <div *ngIf="rebateForm.get('cityName')?.invalid && (rebateForm.get('cityName')?.touched || rebateForm.get('cityName')?.dirty)" 
+                                             class="error-message">
+                                            {{ cityNameErrorMessage }}
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <mat-label>State*</mat-label>
+                                        <mat-form-field appearance="outline" class="responsive-field">
+                                            <input matInput placeholder="State" formControlName="stateName" autocomplete="off" required>
+                                        </mat-form-field>
+                                        <div *ngIf="rebateForm.get('stateName')?.invalid && (rebateForm.get('stateName')?.touched || rebateForm.get('stateName')?.dirty)" 
+                                             class="error-message">
+                                            {{ stateNameErrorMessage }}
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <mat-label>ZipCode*</mat-label>
+                                        <mat-form-field appearance="outline" class="responsive-field">
+                                            <input matInput placeholder="ZipCode" formControlName="zipCode" autocomplete="off" required>
+                                        </mat-form-field>
+                                        <div *ngIf="rebateForm.get('zipCode')?.invalid && (rebateForm.get('zipCode')?.touched || rebateForm.get('zipCode')?.dirty)" 
+                                             class="error-message">
+                                            {{ zipCodeErrorMessage }}
+                                        </div>
+                                    </div>
+                                </div>
+                    
+                                <div class="button-container">
+                                    <button type="button" 
+                                            (click)="addDummyCompany(rebateForm.value.cityName, rebateForm.value.branchID, rebateForm.value.customerName, rebateForm.value.streetName, rebateForm.value.stateName, rebateForm.value.zipCode)" 
+                                            [disabled]="rebateForm.invalid"
+                                            class="btn btn__primary responsive-button">
+                                        Add New Branch
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>                                                            
+
+                    <!--*ngIf="(selectedRebatePgm != 'National Account' && selectedToggleValue == 'existingCustomer') || (selectedRebatePgm == 'National Account' && selectedNationalAccountId != '')"-->
+                    <app-progress-bar></app-progress-bar>
+                    <div class="table-container">
+                        <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 vlexistingCustomer"
+                        (matSortChange)="customSort($event)">
+                            <!-- Company Column -->
+                            <ng-container matColumnDef="company">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header sticky> Company </th>
+                                <td style="cursor: pointer;" mat-cell *matCellDef="let element">
+                                    <span class="mobview__firstrow">
+                                        <span class="mobview__company__id" *ngIf="selectedRebatePgm !== 'National Account'">
+                                            <span class="label-item">Company</span>
+                                            <span>{{element.company_name}}</span>
+                                        </span>
+                                        <span class="mobview__company__id" *ngIf="selectedRebatePgm === 'National Account'">
+                                            <span class="label-item">Branch ID</span>
+                                            <span>{{element.fleet_id}}</span>
+                                        </span>
+                                        <span class="mobview__company__city">
+                                            <span class="label-item">City</span>
+                                            <span>{{element.city}}</span>
+                                        </span>
+                                        <button (click)="toggleExpand($event)"
+                                                class="btn btn__ico-btn btn__ico-btn__lg btn__expand" matTooltip="expand"
+                                                [matTooltipPosition]="'after'"
+                                                matTooltipClass="custom-tooltip">
+                                            <mat-icon>keyboard_arrow_down</mat-icon>
+                                        </button>
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <!-- Fleet ID Column -->
+                            <ng-container matColumnDef="fleetid">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header sticky> {{ selectedRebatePgm === 'National Account' ? 'Branch ID' : 'Company ID' }} </th>
+                                <td style="cursor: pointer;" mat-cell *matCellDef="let element">
+                                    <span class="label-item">{{ selectedRebatePgm === 'National Account' ? 'Branch ID' : 'Company ID' }}</span>
+                                    <button class="btn__companyID"
+                                            (click)="addRebate(element.customer_id,element.child_id,element.company_name, element.fleet_id, element.expiration, element.discount)">
+                                        {{element.fleet_id}}
+                                    </button>
+                                </td>
+                            </ng-container>
+
+                            <!-- Expiration Column -->
+                            <ng-container matColumnDef="expiration">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header sticky> Expiration </th>
+                                <td style="cursor: pointer;" mat-cell *matCellDef="let element"
+                                    (click)="addRebate(element.customer_id,element.child_id,element.company_name, element.fleet_id, element.expiration, element.discount)">
+                                    <span class="label-item">Expiration</span>
+                                    {{element.expiration}}
+                                </td>
+                            </ng-container>
+
+                            <!-- Street Column -->
+                            <ng-container matColumnDef="street" *ngIf="selectedRebatePgm === 'National Account'">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header sticky> Street </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <span class="label-item">Street</span>
+                                    {{ element.street }}
+                                </td>
+                            </ng-container>
+
+                            <!-- City Column -->
+                            <ng-container matColumnDef="city">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header sticky> City </th>
+                                <td style="cursor: pointer;" mat-cell *matCellDef="let element"
+                                    (click)="addRebate(element.customer_id,element.child_id,element.company_name, element.fleet_id, element.expiration, element.discount)" class="element__mobile-hide">
+                                    <span class="label-item">City</span>
+                                    {{element.city}}
+                                </td>
+                            </ng-container>
+
+                            <!-- State Column -->
+                            <ng-container matColumnDef="state" *ngIf="selectedRebatePgm === 'National Account'">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header sticky> State </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <span class="label-item">State</span>
+                                    {{ element.state }}
+                                </td>
+                            </ng-container>
+
+                            <!-- Zip Column -->
+                            <ng-container matColumnDef="zip" *ngIf="selectedRebatePgm === 'National Account'">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header sticky> Zip </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <span class="label-item">Zip</span>
+                                    {{ element.zip }}
+                                </td>
+                            </ng-container>
+
+                            <!-- Header and Row Rendering -->
+                            <tr mat-header-row *matHeaderRowDef="selectedRebatePgm === 'National Account' ? NatdisplayedColumns : displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: selectedRebatePgm === 'National Account' ? NatdisplayedColumns : displayedColumns;"></tr>
+                        </table>                      
+                    </div>
+                    
+                    <div *ngIf="isEmptySearch && selectedRebatePgm === 'National Account'" class="no-results-form">
+                        <div class="form-group vl-text-align no-results-container">
+                            <br>
+                            <!-- <img [src]="assetUrl + 'no-data-icon.svg'" alt="No records found" class="no-results-image" /> -->
+                            <h3 class="no-results-text">No records found.</h3>
+                            <br>
+                        </div>
+                    </div>                    
+
+                    <div *ngIf="isEmptySearch && selectedRebatePgm != 'National Account'" class="no-records-message">
+                        <div class="" *ngIf="selectedRebatePgm != 'National Account'">
+                            <br>
+                            <!-- <img [src]="assetUrl + 'no-data-icon.svg'" alt="No records found" /> -->
+                            <h3>No records found.</h3>
+                            <br>
+                        </div>
+                    </div>
+
+                    <app-skeleton-loader [rowCount]="5"></app-skeleton-loader>
+                    <!-- No records found message -->
+                    <div *ngIf="isDontShow && totalItems === 0 && dataSource?.data?.length === 0" class="no-records-message">
+                        <div class="col-12" *ngIf="selectedRebatePgm === 'National Account'">
+                            <!-- <img src="assets/no-data-icon-sm.svg" alt=""> -->
+                            <h3>No National Accounts Selected</h3>
+                            <p>Choose a national account to get started.</p>
+                        </div>
+                        <div class="" *ngIf="selectedRebatePgm != 'National Account'">
+                            <!-- <img [src]="assetUrl + 'no-data-icon.svg'" alt="No records found" /> -->
+                            <!-- <h3>No records found.</h3>
+                            <br> -->
+                        </div>
+                    </div>                      
+                    <mat-paginator [length]="100" [pageSize]="4" [pageSizeOptions]="[4, 10, 25, 100]"
+                        aria-label="Select page">
+                    </mat-paginator>
+                </div>
+                <!-- End of Existing Customer Table -->
+
+                <!-- New Customer Form -->
+                <div class="col-12"
+                    *ngIf="selectedToggleValue == 'newCustomer'  && selectedRebatePgm != 'National Account'">
+                    <div class="row gx-3 gy-2">
+                        <div class="col-12">
+                            <div class="form-field-wrap">
+                                <mat-label>Company Name*</mat-label>
+                                <mat-form-field appearance="outline" class="no-float-label" subscriptSizing="dynamic">
+                                    <input matInput placeholder="Company Name" id="companyName" required
+                                        autocomplete="off" formControlName="companyname">
+                                </mat-form-field>
+                            </div>
+                            <div
+                                *ngIf="form.get('companyname')?.invalid && (form.get('companyname')?.dirty || form.get('companyname')?.touched)">
+                                <div class="error-message" *ngIf="form.get('companyname')?.hasError('required')">Company
+                                    name is required.</div>
+                                <div class="error-message" *ngIf="form.get('companyname')?.hasError('minlength')">
+                                    Company name must be at least 3 characters long.</div>
+                            </div>
+                            <!-- Error Message Display -->
+                            <div *ngIf="companynameErrorMessage" class="error-message">{{ companynameErrorMessage }}
+                            </div>
+
+                        </div>
+                        <div class="col-6">
+                            <div class="form-field-wrap">
+                                <mat-label>First Name *</mat-label>
+                                <mat-form-field appearance="outline" class="no-float-label" subscriptSizing="dynamic">
+                                    <input matInput placeholder="First Name" formControlName="firstname" id="firstName"
+                                        required autocomplete="off">
+                                </mat-form-field>
+                            </div>
+                            <!-- Error Message Display -->
+                            <div *ngIf="form.get('firstname')?.invalid && (form.get('firstname')?.dirty || form.get('firstname')?.touched)">
+                                <div class="error-message" *ngIf="form.get('firstname')?.hasError('required')">First
+                                    name is required.</div>
+                                <div class="error-message" *ngIf="form.get('firstname')?.hasError('minlength')">
+                                    First name must be at least 3 characters long.</div>
+                            </div>
+                            <div *ngIf="firstnameErrorMessage" class="error-message">{{ firstnameErrorMessage }}</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-field-wrap">
+                                <mat-label>Last Name *</mat-label>
+                                <mat-form-field appearance="outline" class="no-float-label" subscriptSizing="dynamic">
+                                    <input matInput placeholder="Last Name" formControlName="lastname" id="lastName"
+                                        autocomplete="off">
+                                </mat-form-field>
+                            </div>
+                            <!-- Error Message Display -->
+                            <div
+                                *ngIf="form.get('lastname')?.invalid && (form.get('lastname')?.dirty || form.get('lastname')?.touched)">
+                                <div class="error-message" *ngIf="form.get('lastname')?.hasError('required')">Last
+                                    name is required.</div>
+                                <div class="error-message" *ngIf="form.get('lastname')?.hasError('minlength')">
+                                    Last name must be at least 2 characters long.</div>
+                            </div>
+                            <div *ngIf="lastNameErrorMessage" class="error-message">{{ lastNameErrorMessage }}</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-field-wrap">
+                                <mat-label>Phone *</mat-label>
+                                <mat-form-field appearance="outline" class="no-float-label" subscriptSizing="dynamic">
+                                    <input matInput formControlName="phone" id="phone" appPhoneMask
+                                        placeholder="(123) 456-7890" autocomplete="off">
+                                </mat-form-field>
+                            </div>
+                            <!-- Error Message Display -->
+                            <div
+                                *ngIf="form.get('phone')?.invalid && (form.get('phone')?.dirty || form.get('phone')?.touched)">
+                                <div class="error-message" *ngIf="form.get('phone')?.hasError('required')">Phone number
+                                    is required.</div>
+                                <!--<div class="error-message" *ngIf="form.get('phone')?.hasError('pattern')">
+                                    Invalid phone number format.</div>-->
+                            </div>
+                            <div *ngIf="phoneErrorMessage" class="error-message">{{ phoneErrorMessage }}</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-field-wrap">
+                                <mat-label>Email *</mat-label>
+                                <mat-form-field appearance="outline" class="no-float-label" subscriptSizing="dynamic">
+                                    <input matInput placeholder="Email" id="email" type="email" autocomplete="off"
+                                        formControlName="email">
+                                </mat-form-field>
+                            </div>
+                            <!-- Error Message Display -->
+                            <div
+                                *ngIf="form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched)">
+                                <div class="error-message" *ngIf="form.get('email')?.hasError('required')">Email is
+                                    required.</div>
+                                <div class="error-message" *ngIf="form.get('email')?.hasError('email')">
+                                    Invalid email format.</div>
+                            </div>
+                            <div *ngIf="emailErrorMessage" class="error-message">{{ emailErrorMessage }}</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-field-wrap">
+                                <mat-label>Street *</mat-label>
+                                <mat-form-field appearance="outline" class="no-float-label" subscriptSizing="dynamic">
+                                    <input matInput placeholder="Street" id="street" autocomplete="off"
+                                        formControlName="street">
+                                </mat-form-field>
+                            </div>
+                            <!-- Error Message Display -->
+                            <div
+                                *ngIf="form.get('street')?.invalid && (form.get('street')?.dirty || form.get('street')?.touched)">
+                                <div class="error-message" *ngIf="form.get('street')?.hasError('required')">Street is
+                                    required.</div>
+                                <div class="error-message" *ngIf="form.get('street')?.hasError('minlength')">
+                                    Street must be at least 3 characters long.</div>
+                            </div>
+                            <div *ngIf="streetErrorMessage" class="error-message">{{ streetErrorMessage }}</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-field-wrap">
+                                <mat-label>City *</mat-label>
+                                <mat-form-field appearance="outline" class="no-float-label" subscriptSizing="dynamic">
+                                    <input matInput placeholder="City" id="city" autocomplete="off"
+                                        formControlName="city">
+                                </mat-form-field>
+                            </div>
+                            <!-- Error Message Display -->
+                            <div
+                                *ngIf="form.get('city')?.invalid && (form.get('city')?.dirty || form.get('city')?.touched)">
+                                <div class="error-message" *ngIf="form.get('city')?.hasError('required')">City is
+                                    required.</div>
+                                <div class="error-message" *ngIf="form.get('city')?.hasError('minlength')">
+                                    City must be at least 3 characters long.</div>
+                            </div>
+                            <div *ngIf="cityErrorMessage" class="error-message">{{ cityErrorMessage }}</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-field-wrap">
+                                <mat-label>State *</mat-label>
+                                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                                    <mat-select placeholder="Select State" [(value)]="selectedValue"
+                                        formControlName="state">
+                                        <mat-option value="AL">Alabama</mat-option>
+                                        <mat-option value="AK">Alaska</mat-option>
+                                        <mat-option value="AZ">Arizona</mat-option>
+                                        <mat-option value="AR">Arkansas</mat-option>
+                                        <mat-option value="CA">California</mat-option>
+                                        <mat-option value="CO">Colorado</mat-option>
+                                        <mat-option value="CT">Connecticut</mat-option>
+                                        <mat-option value="DE">Delaware</mat-option>
+                                        <mat-option value="DC">District Of Columbia</mat-option>
+                                        <mat-option value="FL">Florida</mat-option>
+                                        <mat-option value="GA">Georgia</mat-option>
+                                        <mat-option value="HI">Hawaii</mat-option>
+                                        <mat-option value="ID">Idaho</mat-option>
+                                        <mat-option value="IL">Illinois</mat-option>
+                                        <mat-option value="IN">Indiana</mat-option>
+                                        <mat-option value="IA">Iowa</mat-option>
+                                        <mat-option value="KS">Kansas</mat-option>
+                                        <mat-option value="KY">Kentucky</mat-option>
+                                        <mat-option value="LA">Louisiana</mat-option>
+                                        <mat-option value="ME">Maine</mat-option>
+                                        <mat-option value="MD">Maryland</mat-option>
+                                        <mat-option value="MA">Massachusetts</mat-option>
+                                        <mat-option value="MI">Michigan</mat-option>
+                                        <mat-option value="MN">Minnesota</mat-option>
+                                        <mat-option value="MS">Mississippi</mat-option>
+                                        <mat-option value="MO">Missouri</mat-option>
+                                        <mat-option value="MT">Montana</mat-option>
+                                        <mat-option value="NE">Nebraska</mat-option>
+                                        <mat-option value="NV">Nevada</mat-option>
+                                        <mat-option value="NH">New Hampshire</mat-option>
+                                        <mat-option value="NJ">New Jersey</mat-option>
+                                        <mat-option value="NM">New Mexico</mat-option>
+                                        <mat-option value="NY">New York</mat-option>
+                                        <mat-option value="NC">North Carolina</mat-option>
+                                        <mat-option value="ND">North Dakota</mat-option>
+                                        <mat-option value="OH">Ohio</mat-option>
+                                        <mat-option value="OK">Oklahoma</mat-option>
+                                        <mat-option value="OR">Oregon</mat-option>
+                                        <mat-option value="PA">Pennsylvania</mat-option>
+                                        <mat-option value="RI">Rhode Island</mat-option>
+                                        <mat-option value="SC">South Carolina</mat-option>
+                                        <mat-option value="SD">South Dakota</mat-option>
+                                        <mat-option value="TN">Tennessee</mat-option>
+                                        <mat-option value="TX">Texas</mat-option>
+                                        <mat-option value="UT">Utah</mat-option>
+                                        <mat-option value="VT">Vermont</mat-option>
+                                        <mat-option value="VA">Virginia</mat-option>
+                                        <mat-option value="WA">Washington</mat-option>
+                                        <mat-option value="WV">West Virginia</mat-option>
+                                        <mat-option value="WI">Wisconsin</mat-option>
+                                        <mat-option value="WY">Wyoming</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <!-- Error Message Display -->
+                            <div
+                                *ngIf="form.get('state')?.invalid && (form.get('state')?.dirty || form.get('state')?.touched)">
+                                <div class="error-message" *ngIf="form.get('state')?.hasError('required')">State is
+                                    required.</div>
+
+                            </div>
+                            <div *ngIf="stateErrorMessage" class="error-message">{{ stateErrorMessage }}</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-field-wrap">
+                                <mat-label>Zip *</mat-label>
+                                <mat-form-field appearance="outline" class="no-float-label" subscriptSizing="dynamic">
+                                    <input matInput placeholder="Zip" id="zip" maxlength="5" (input)="onInput($event)"
+                                        autocomplete="off" pattern="[0-9]*" formControlName="zip">
+                                </mat-form-field>
+                            </div>
+                            <!-- Error Message Display -->
+                            <div
+                                *ngIf="form.get('zip')?.invalid && (form.get('zip')?.dirty || form.get('zip')?.touched)">
+                                <div class="error-message" *ngIf="form.get('zip')?.hasError('required')">Zip code is
+                                    required.</div>
+                                <div class="error-message" *ngIf="form.get('zip')?.hasError('pattern')">Zip code must be
+                                    5 digits long.</div>
+                            </div>
+                            <div *ngIf="zipErrorMessage" class="error-message">{{ zipErrorMessage }}</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End of New Customer Form -->
+
+                <!-- External Customer Table -->                                
+                <div class="col-12" *ngIf="selectedToggleValue == 'externalCustomer'">
+                    <app-progress-bar></app-progress-bar>
+                    <table mat-table [dataSource]="externalCustomerData" matSort class="mat-elevation-z8"
+                        (matSortChange)="ExternalcustomSort($event)">
+                        <!-- Company Column -->
+                        <ng-container matColumnDef="company">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Company </th>
+                            <td style="cursor: pointer;" mat-cell *matCellDef="let element">
+                                <span class="mobview__firstrow">
+                                    <span class="mobview__company__id">
+                                        <span class="label-item">Company</span>
+                                        <span>{{element.company_name}}</span>
+                                    </span>
+                                    <span class="mobview__company__city">
+                                        <span class="label-item">City</span>
+                                        <span>{{element.city}}</span>
+                                    </span>
+                                    <!-- <span class="mobview__customer__status mobview__customer__city">
+                                        <span class="label-item">City</span>
+                                        <span>{{element.city}}</span>
+                                    </span> -->
+                                    <button (click)="toggleExpand($event)"
+                                            class="btn btn__ico-btn btn__ico-btn__lg btn__expand" matTooltip="expand"
+                                            [matTooltipPosition]="'after'"
+                                            matTooltipClass="custom-tooltip">
+                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                    </button>
+                                </span>
+                            </td>
+                        </ng-container>
+                        <!-- Fleet ID Column -->
+                        <ng-container matColumnDef="fleetid">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Company ID </th>
+                            <td style="cursor: pointer;" mat-cell *matCellDef="let element">
+                                <span class="label-item">Company ID</span>
+                                <button class="btn__companyID"
+                                        (click)="addRebate(element.customer_id,element.child_id,element.company_name, element.fleet_id, element.expiration, element.discount)">
+                                    {{element.fleet_id}}
+                                </button>
+                            </td>
+                        </ng-container>
+                        <!-- Expiration Column -->
+                        <ng-container matColumnDef="expiration">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Expiration </th>
+                            <td style="cursor: pointer;" mat-cell *matCellDef="let element"
+                                (click)="addRebate(element.customer_id,element.child_id,element.company_name, element.fleet_id, element.expiration, element.discount)">
+                                <span class="label-item">Expiration</span>
+                                {{element.expiration}}
+                            </td>
+                        </ng-container>
+                        <!-- City Column -->
+                        <ng-container matColumnDef="city">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> City </th>
+                            <td style="cursor: pointer;" mat-cell *matCellDef="let element"
+                                (click)="addRebate(element.customer_id,element.child_id,element.company_name, element.fleet_id, element.expiration, element.discount)" class="element__mobile-hide">
+                                <span class="label-item">City</span>
+                                {{element.city}}
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                    <app-skeleton-loader *ngIf="searchBtn === true" [rowCount]="5"></app-skeleton-loader>
+                    <!-- No records found message -->
+                    <div *ngIf="externalCustomerData.data.length === 0" class="no-records-message">
+                        <img [src]="assetUrl + 'no-data-icon.svg'" alt="No data available">
+                        <h3>No records found. You can use the search functionality to find specific records.</h3>
+                    </div>
+                    <!-- Pagination -->
+                    <mat-paginator [length]="totalRecords" [pageSize]="vlpageSize" [pageIndex]="vlpageIndex" 
+                        [pageSizeOptions]="[4, 10, 25, 100]" aria-label="Select page" (page)="onPageChange($event)">
+                    </mat-paginator>
+                </div>
+                <!-- End of External Customer Table -->
+
+            </div>
+        </div>
+
+        <!-- Button Group -->
+        <div class="col-12 d-flex justify-content-end pt-3" *ngIf="selectedRebatePgm != 'National Account'">
+            <div class="btn-grp">
+                <button type="button" class="btn btn__secondary" *ngIf="selectedToggleValue == 'newCustomer'"
+                    (click)="clearFields();">Clear</button>
+                <button type="submit" class="btn btn__primary" [disabled]="form.invalid"
+                    *ngIf="selectedToggleValue == 'newCustomer'">Add</button>
+                <!--<button type="button" class="btn btn__primary" (click)="addCustomer()"
+                *ngIf="selectedToggleValue == 'newCustomer'">Add</button>-->
+            </div>
+        </div>
+        <!-- End of Button Group -->
+    </form>
+
+
+</div>

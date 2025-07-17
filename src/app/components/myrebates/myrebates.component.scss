@@ -1,0 +1,132 @@
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.mat-column-customer {
+  width: 500px; /* Example width for Name column */
+}
+:host ::ng-deep .mdc-text-field--outlined {
+  --mdc-outlined-text-field-container-shape: 28px;
+}
+
+::ng-deep .red-snackbar .mdc-snackbar__surface {
+  background-color: red !important;
+  color: white !important;
+}
+
+/* Mobile specific styles */
+@media (max-width: 599px) {
+  .responsive-table-wrp {
+    white-space: normal;
+    display: block;
+    overflow-x: scroll;
+    table {
+      white-space: normal;
+    }
+  }
+}
+.mat-column-customerinfo {
+  width: 38%;
+}
+.mat-column-datecreated {
+  width: 13%;
+}
+.mat-column-refno {
+  width: 12%;
+}
+.mat-column-status {
+  width: 10%;
+}
+.mat-column-type {
+  width: 17%;
+}
+.mat-column-rebate {
+  width: 10%;
+}
+/* Desktop specific styles */
+@media (min-width: 600px) {
+  .responsive-table-wrp {
+    overflow-x:unset;
+  }
+}
+  @media(max-width:1024px) {
+    .container-wrp .inner-container {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+    .left-block {
+      margin-bottom: 10px;
+    }
+  }
+  @media(max-width:767px) {
+    .container-wrp {
+      .inner-container, .left-block ,.btn-grp,.right-block{
+        flex-direction: column;
+      }
+      .right-block,.left-block,.btn-grp,.mat-mdc-form-field{
+        width: 100%;
+      }
+      .right-block .btn {
+        justify-content: flex-start;
+        width: 100%;
+      }
+      .btn-grp .mat-mdc-form-field {
+        max-width: 100%;
+        margin: 10px 0;
+    }
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    .left-block {
+      margin-bottom: 6px;
+    }
+    .container-wrp .right-block .btn.btn__addnew{
+      background-color: #273A60;
+      border-radius: 16px;
+      height: 48px;
+      align-items: center;
+      display: flex;
+      margin-bottom: 16px;
+      color: #fff !important;
+      justify-content: center;
+    }
+    .pg-outer-container{
+      padding: 16px;
+    }
+    .mat-column-customerinfo {
+      width: 100%;
+    }
+    .mat-column-datecreated {
+      width: 100%;
+    }
+    .mat-column-refno {
+      width: 100%;
+    }
+    .mat-column-status {
+      width: 100%;
+    }
+    .mat-column-type {
+      width: 100%;
+    }
+    .mat-column-rebate {
+      width: 100%;
+    }
+    .content-container{
+      padding: 16px;
+    }
+    .inner-container{
+      padding-top: 0px;
+    }
+    .inner-container__title-wo-border h1{
+      text-align: left;
+      padding-bottom: 0px;
+    }
+    .left-block{
+      align-items: start;
+    }
+  }
+  

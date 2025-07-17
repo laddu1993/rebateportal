@@ -1,0 +1,454 @@
+.form-group {
+  display: flex;
+  align-items: center; /* Aligns items vertically in the center */
+  gap: 16px; /* Adds horizontal space between elements */
+}
+
+.vl-text-align{
+  display: flex; 
+  justify-content: center;
+}
+
+.input-spacing {
+  margin-right: 16px; /* Optional: Adds additional spacing to the right if needed */
+}
+
+.button-spacing {
+  margin-bottom: 28px !important;
+}
+
+.searchip {
+  flex: 1; /* Optional: Ensures inputs take equal width if required */
+}
+
+.external-customer-search {
+  .sub-container__title {
+    display: flex;
+    flex-direction: column; /* Stack content for responsiveness */
+    gap: 15px;
+
+    .left-block {
+      text-align: left;
+      align-self: flex-start;
+      margin: 0;
+      padding: 0;
+    }
+
+    .right-block {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+
+      .search-fields {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+
+        mat-form-field {
+          flex: 1 1 calc(25% - 10px);
+          min-width: 180px;
+          max-width: calc(25% - 10px);
+          box-sizing: border-box;
+        }
+      }
+
+      .btn__primary {
+        align-self: flex-start;
+        // min-width: 120px;
+        background-color: #273A60; /* Primary background color */
+        color: #fff; /* Contrast color for text */
+        border: none;
+        // border-radius: 4px;
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #273A60; /* Hover state */
+        }
+
+        &:active {
+          background-color: #273A60; /* Active state */
+        }
+      }
+    }
+  }
+}
+
+/* Default: Hide on larger screens (desktop view) */
+.mobview__company__city {
+  display: none !important;
+}
+/* for over-writing height of popup */
+
+.mat-mdc-dialog-container .mdc-dialog__surface{
+  height: 90vh !important;
+}
+@media screen and (max-width: 1024px) {
+  .search-fields mat-form-field {
+    flex: 1 1 calc(50% - 10px);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .sub-container__title {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mobview__company__city {
+    display: inline !important;
+  }
+
+  .search-fields {
+    flex-direction: column;
+  }
+
+  .btn__primary {
+    width: 100%;
+    text-align: center;
+    background-color: #273A60; /* Ensure background-color is retained */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .search-fields mat-form-field {
+    min-width: 150px;
+  }
+
+  .btn__primary {
+    font-size: 14px;
+    padding: 8px 10px;
+    background-color: #273A60; /* Explicitly set for extra small screens */
+  }
+}
+
+.popup-content {
+  width: 100%; /* Adjust the width as needed */
+  max-width: 900px; /* Set a maximum width for larger screens */
+  max-height: 90vh;/* Ensure height is flexible */
+}
+
+  .error-message{
+    color: #F25420;
+    padding-top: 8px;
+  }
+  .mat-column-fleetid {
+    width: 20%;
+  }
+  
+  .mat-column-expiration {
+    width: 20%;
+  }
+  .mat-column-company {
+    width: 35%;
+  }
+  
+  .mat-column-city {
+    width: 25%;
+  }
+  
+.no-records-message {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.no-records-message img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100px; /* Optional: Adjust size as needed */
+}
+
+.no-records-message h3 {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: #555; /* Optional: Add a soft color for better appearance */
+}
+  
+  /* Optional: Adjust the styling for smaller screens */
+  @media (max-width: 768px) {
+    .popup-content {
+      width: 100%; /* Adjust width for smaller screens */
+    }
+  }
+  .loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .add-top-sec-na{
+    padding-bottom: 16px;
+    border-bottom: 1px solid #D2D2D1;
+  }
+  .existing-customer-tab{
+    padding-top: 16px;
+  }
+ .scroll-group {
+  table {
+    white-space: nowrap;
+  }
+ }
+ 
+  @media(max-width:575px) {
+    .existing-customer-tab {
+      .mat-button-toggle-group{
+        display:flex;
+        white-space: nowrap;
+        overflow-x: scroll;
+        border: none;
+        column-gap: 16px;
+      }
+      .mat-button-toggle {
+        display: inline-block;
+      }
+      .mat-mdc-paginator-range-label {
+        margin: 0 10px;
+      }
+    }
+  }
+  @media(max-width:480px) {
+    
+      .sub-container__title {
+        flex-wrap: wrap;
+        margin-top: 5px;
+      }
+    
+  }
+  /* Mobile specific styles */
+@media (max-width: 599px) {
+  .responsive-table-wrp {
+    white-space: nowrap;
+    display: block;
+    overflow-x: scroll;
+    table {
+      white-space: nowrap;
+    }
+  }
+  .no-results-form.responsive-container{
+    & .button-container{
+      margin-left:initial;
+  }
+  }
+}
+/* Desktop specific styles */
+@media (min-width: 600px) {
+  .responsive-table-wrp {
+    overflow:hidden;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .cdk-overlay-pane{
+    width:100% !important;
+  }
+  .popup-content {
+    width: 100%; /* Adjust width for smaller screens */
+    --bs-gutter-x: 0px;
+  }
+  .mat-mdc-dialog-container .mat-mdc-table thead{
+    display: none;
+  }
+  .mat-column-fleetid {
+    width: 100%;
+  }
+  
+  .mat-column-expiration {
+    width: 100%;
+  }
+  .mat-column-company {
+    width: 100%;
+  }
+  
+  .mat-column-city {
+    width: 100%;
+  }
+  .inner-container{
+    padding-bottom: 0px;
+  }
+  .add-top-sec {
+    border-bottom: none;
+    padding-bottom: 0px;
+}
+.existing-customer-tab {
+  &.mat-button-toggle-group{
+    display: block;
+    white-space: inherit;
+    overflow-x: scroll;
+  }
+}
+.mdc-dialog__container .mat-mdc-table .mat-mdc-row .mat-mdc-cell button.btn__companyID{
+  background-color: red !important;
+}
+.existing-customer-tab{
+  padding-top: 8px;
+
+  
+}
+.scroll-group table {
+  white-space: normal;
+}
+}
+
+.responsive-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.responsive-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Spacing between fields */
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column; /* Ensures each label, input, and error message appears on a new line */
+}
+
+.responsive-field {
+  width: 100%;
+  max-width: 400px;
+}
+.no-results-form.responsive-container{
+  width:100%;
+}
+.no-results-form.responsive-container .form-row{
+  width:100%;
+}
+.no-results-form.responsive-container{
+  max-width: 100%;
+  padding: 16px 0;
+  & .responsive-field{
+    max-width: 100%;
+  }
+  & .branch-city-container {
+    display: flex;
+    column-gap: 16px;
+    width:100%;
+  }
+  & .error-message{
+    padding-top: 0;
+  }
+  & .button-container{
+    margin-left: auto;
+    & .responsive-button{
+      margin-top: 0px;
+    }
+    
+  }
+  & ::ng-deep .mat-mdc-form-field-subscript-wrapper{
+    display: none;
+  }
+ 
+}
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+/* Button Styling */
+.responsive-button {
+  width: 180px;
+  height: 45px;
+  background-color: #1e335c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  white-space: nowrap;
+  padding: 10px 20px;
+  margin-top: 20px; /* Adds space between the last input and button */
+}
+
+.responsive-button:hover {
+  background-color: #142644;
+}
+
+/* Mobile-Specific Styles */
+@media (max-width: 768px) {
+  .responsive-container {
+    width: 95%;
+    padding: 15px;
+  }
+  .no-results-form.responsive-container{
+  
+    & .branch-city-container {
+      display: flex;
+      flex-direction: column;
+      column-gap: 16px;
+      row-gap: 16px;
+      width:100%;
+    }
+    & .button-container{
+      margin-left:initial;
+    }
+  }
+  .responsive-form {
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .responsive-field {
+    width: 100%;
+  }
+
+  .responsive-button {
+    width: 100%;
+    height: 50px;
+    white-space: normal;
+    border-radius: 16px;
+  }
+  .sub-container .right-block {
+    flex: 1;
+    width: 100%;
+}
+}
+
+.table-container {
+  max-height: 400px; /* Adjust height as needed */
+  overflow-y: auto;
+}
+
+th[sticky] {
+  font-weight: 600 !important;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+  background: #f5f5f5; /* Light grey background */
+  border-bottom: 2px solid #ddd; /* Optional: adds a subtle bottom border */
+}
+
+.no-results-container {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  width: 100% !important;
+}
+
+.no-results-image {
+  display: block !important;
+  margin: 0 auto 10px auto !important;
+  max-width: 100px !important; /* Adjust size if needed */
+}
+
+.no-results-text {
+  display: block !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+}
+
+.hidden-form {
+  display: none;
+}

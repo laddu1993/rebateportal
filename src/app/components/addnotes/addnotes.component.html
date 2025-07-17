@@ -1,0 +1,47 @@
+<!-- ADD NOTES POPUP -->
+
+<div class="inner-container inner-container__title-wo-border">
+    <div class="left-block">
+        <h1>Notes</h1>
+    </div>
+    <div class="right-block">
+        <button (click)="closeDialogPopUp()" style="cursor: pointer;"><img src="../../../assets/close-icon.svg" alt="" (click)="closeDialogPopUp()"></button>
+    </div>
+</div>
+
+<div class="popup-content popup-content__small row gy-4">
+
+    <div class="col-12">
+        <div class="row gy-3">
+            <!--<div class="col-12">
+                <div class="form-field-wrap">
+                    <mat-label>Title</mat-label>
+                    <mat-form-field appearance="outline" class="no-float-label" subscriptSizing="dynamic">
+                        <input matInput placeholder="Enter note title">
+                    </mat-form-field>
+                </div>
+            </div>-->
+            <div class="col-12">
+                <div class="form-field-wrap">
+                    <mat-label>Content</mat-label>
+                    <mat-form-field appearance="outline" class="no-float-label" subscriptSizing="dynamic">
+                        <textarea matInput placeholder="Enter your notes here" id="notes">{{notes}}</textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12 d-flex justify-content-end">
+        <div class="btn-grp">
+            <button type="button" class="btn btn__secondary" (click)="clearField()">Clear</button>
+            <button type="button" class="btn btn__primary" (click)="addNotes()">Save</button>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+

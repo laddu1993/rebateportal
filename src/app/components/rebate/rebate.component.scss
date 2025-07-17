@@ -1,0 +1,194 @@
+@import '../../../assets/CSS/mixins';
+@import '../../../assets/CSS/variables';
+
+::ng-deep .red-snackbar .mdc-snackbar__surface {
+    background-color: red !important;
+    color: white !important;
+}
+
+.rbt-title-block {
+    display: flex;
+    flex-direction: column;
+    row-gap: 4px;
+}
+
+.inner-container {
+    &__title-small-wo-border {
+        @include grey-border-bottom;
+    }
+}
+
+.notes-box {
+    @include grey-border-bottom;
+
+    &:last-child {
+        border: none;
+    }
+
+    .note-title {
+        display: flex;
+        align-items: flex-start;
+        padding: 12px 0;
+        flex-direction: column;
+
+        h4 {
+            @include title-blue14;
+        }
+
+        p {
+            @include body14-light;
+            margin: 0;
+        }
+    }
+
+    .note-actions {
+        @include flbx-vcntr;
+        justify-content: flex-end;
+        padding: 12px 0;
+
+        img {
+            padding: 0 8px;
+            border-right: 1px solid $Grey-300;
+
+            &:last-child {
+                border: none;
+            }
+        }
+    }
+}
+
+[hidden] {
+    display: none !important;
+}
+.loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  /* Mobile specific styles */
+@media (max-width: 599px) {
+    .responsive-table-wrp {
+      white-space: nowrap;
+      display: block;
+      overflow-x: scroll;
+      table {
+        white-space: nowrap;
+      }
+    }
+  }
+  
+  /* Desktop specific styles */
+  @media (min-width: 600px) {
+    .responsive-table-wrp {
+      overflow:hidden;
+    }
+  }
+  .rebate-wrp {
+    flex-wrap: wrap;
+  }
+  @media(max-width:991px) {
+    .order-detail-wrp {
+        align-items: flex-end;
+        .left-block {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .counterbox {
+            margin: 0 !important;
+        }
+      }
+  }
+  @media(max-width:767px) {
+    .order-detail-wrp {
+       
+        flex-direction: column;
+        .left-block {
+            width: 100%;
+            margin-bottom: 16px;
+        }
+        .counterbox {
+            width: 100%;
+            .sec-col {
+                justify-content: end;
+            }
+        }
+    }
+  }
+  
+  @media(max-width:575px) {
+    .content-container {
+        padding: 20px;
+    }
+    .rebate-wrp {
+        .rbt-title-block {
+            margin-bottom: 10px;
+            .flbx-sp-12 {
+                flex-wrap: wrap;
+            }
+        }
+        .btn-grp {
+            column-gap: 4px;
+            .btn {
+                padding: 10px 16px;
+                min-height: 42px;
+                font-family: Husqvarna Gothic, 'Roboto';
+            }
+        }
+    }
+  }
+  @media(max-width:430px) {
+    .order-detail-wrp {
+        .counterbox {
+            padding: 10px 0px;
+            .sec-col {
+                justify-content: flex-start;
+            }
+        }
+        .right-block {
+            column-gap: 5px;
+            .btn__pl-wicon {
+                width: 35%;
+            }
+            .mat-mdc-form-field {
+                width: 65%;
+            }
+        }
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .order-detail-wrp {
+        .counterbox {
+            padding: 10px 0px;
+            .sec-col {
+                justify-content: flex-start;
+            }
+        }
+        .right-block {
+            column-gap: 5px;
+            
+            .mat-mdc-form-field {
+                width: 100%;
+            }
+        }
+    }
+    ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+        background-color: #fff;
+      }
+      ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+        border-radius: 14px;
+        padding: 0.75em 0.75em 0 0.75em;
+        border: 1px solid #f94747;
+      }
+      .responsive-table-wrp {
+        white-space: nowrap;
+        display: block;
+        overflow-x: scroll;
+        table {
+          white-space:normal;
+        }
+      }
+      .rebate-wrp .btn-grp {
+        column-gap: 8px;
+    }
+  }

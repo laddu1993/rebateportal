@@ -1,0 +1,91 @@
+@import '../../../assets/CSS/mixins';
+@import '../../../assets/CSS/variables';
+
+.tog-sec {
+    @include grey-border-bottom;
+    padding-bottom: 24px;
+}
+
+::ng-deep .red-snackbar .mdc-snackbar__surface {
+  background-color: red !important;
+  color: white !important;
+}
+
+.error-message {
+  color: #F25420;
+  padding-bottom: 5px;
+}
+
+
+/* Mobile specific styles */
+@media (max-width: 599px) {
+  .responsive-table-wrp {
+    white-space: nowrap;
+    display: block;
+    overflow-x: scroll;
+    table {
+      white-space: nowrap;
+    }
+  }
+}
+
+/* Desktop specific styles */
+@media (min-width: 600px) {
+  .responsive-table-wrp {
+    overflow-x:unset;
+  }
+}
+[hidden] {
+    display: none !important;
+}
+.mat-column-date {
+    width: 110px; /* Adjust the width as needed */
+  }
+  @media(max-width:991px) {
+    .input-w-btn {
+        flex-wrap: wrap;
+        .btn {
+            margin-top: 10px;
+        }
+      }
+  }
+  @media(max-width:767px) {
+    .form-field-wrap {
+        margin-bottom: 10px;
+    }
+    .popup-content__mediumplus {
+        max-height: 530px;
+        overflow-y: auto;
+    }
+  }
+  @media(max-width:575px) {
+    .tog-sec {
+        .mat-button-toggle-group {
+            display: block;
+            white-space: nowrap;
+            overflow-x: scroll;
+        }
+        .mat-button-toggle {
+            display: inline-block;
+        }
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .tog-sec {
+      .mat-button-toggle-group {
+          display: block;
+          white-space: nowrap;
+          overflow-x: scroll;
+          border: none;
+      }
+      .mat-button-toggle {
+          display: inline-block;
+          margin-right: 16px;
+      }
+  }
+  .tog-sec {
+    @include grey-border-bottom;
+    border: none;
+    padding-bottom: 0px;
+    }
+  }

@@ -1,0 +1,238 @@
+<!-- ADD REBATE POPUP(Opens when user clicks on 'Add Rebte' button on 'My Rebates' Page) -->
+
+<div class="inner-container inner-container__title-wo-border">
+    <div class="left-block">
+        <h1>Add Item</h1>
+    </div>
+    <div class="right-block">
+        <button (click)="closeDialogPopUp()" style="cursor: pointer;"><img [src]="assetUrl + 'close-icon.svg'" alt=""
+                style="cursor: pointer;"></button>
+    </div>
+</div>
+
+<div class="popup-content popup-content__mediumplus row gy-4">
+
+    <div class="col-12">
+        <div class="tog-sec">
+            <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+                <mat-button-toggle value="searchitems" checked (click)="toggleSearchItemDiv()">Search Invoices</mat-button-toggle>
+                <mat-button-toggle value="addmanually" (click)="toggleAddItemDiv()">Add Manually</mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="row gy-4">
+
+            <!-- add existing -->
+
+            <div class="col-12" [hidden]="isShowSearchItemDiv">
+
+                <div class="row gy-3">
+
+                    <div class="input-w-btn col-12">
+                        <div class="row gx-3">
+                            <div class="form-field-wrap col-12 col-sm-6 col-md-3">
+                                <mat-label>Serial</mat-label>
+                                <mat-form-field appearance="outline" class="no-float-label" subscriptSizing="dynamic">
+                                    <input matInput placeholder="Serial Number" id="searchSerial" name="searchSerial"
+                                        autocomplete="off">
+                                </mat-form-field>
+                            </div>
+                            <div class="form-field-wrap col-12 col-sm-6 col-md-3">
+                                <mat-label>Model</mat-label>
+                                <mat-form-field appearance="outline" class="no-float-label" subscriptSizing="dynamic">
+                                    <input matInput placeholder="Model" id="searchModel" name="searchModel"
+                                        autocomplete="off">
+                                </mat-form-field>
+                            </div>
+                            <div class="form-field-wrap col-12 col-sm-6 col-md-3">
+                                <mat-label>SKU</mat-label>
+                                <mat-form-field appearance="outline" class="no-float-label" subscriptSizing="dynamic">
+                                    <input matInput placeholder="SKU" id="searchSKU" name="searchSKU"
+                                        autocomplete="off">
+                                </mat-form-field>
+                            </div>
+                            <div class="form-field-wrap col-12 col-sm-6 col-md-3">
+                                <mat-label>Invoice</mat-label>
+                                <mat-form-field appearance="outline" class="no-float-label" subscriptSizing="dynamic">
+                                    <input matInput placeholder="Invoice Number" id="searchInv" name="searchInv"
+                                        autocomplete="off">
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn__primary" (click)="searchInvoice()" [disabled]="isLoading">Search</button>
+                    </div>
+                    <div class="col-12">
+                        <!-- Error Message Display -->
+                        <div *ngIf="searchErrorMessage" class="error-message">
+                            {{ searchErrorMessage }}
+                        </div>
+                        <div class="hint" role="alert">
+                            <h3>Note:</h3>
+                            <p>You do not need to enter the full text, searching will often work better with partial matching.</p>
+                        </div>
+                    </div>                    
+
+                </div>
+
+            </div>
+
+            <!-- End of add existing -->
+
+
+            <!-- Add manually Form -->
+            <div class="col-12" [hidden]="isShowAddManuallyDiv">
+                <div class="row gx-3 gy-3">
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="form-field-wrap">
+                            <mat-label>SKU</mat-label>
+                            <mat-form-field appearance="outline" class="no-float-label" subscriptSizing="dynamic">
+                                <input matInput placeholder="SKU" id="sku" [(ngModel)]="sku" autocomplete="off">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="form-field-wrap">
+                            <mat-label>Serial Number</mat-label>
+                            <mat-form-field appearance="outline" class="no-float-label" subscriptSizing="dynamic">
+                                <input matInput placeholder="Serial Number" id="serial" [(ngModel)]="serial"
+                                    autocomplete="off">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="form-field-wrap">
+                            <mat-label>Retail Price</mat-label>
+                            <mat-form-field appearance="outline" class="no-float-label" subscriptSizing="dynamic">
+                                <input matInput placeholder="Price" id="price" [(ngModel)]="price" autocomplete="off">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="form-field-wrap">
+                            <mat-label>Invoice Number</mat-label>
+                            <mat-form-field appearance="outline" class="no-float-label" subscriptSizing="dynamic">
+                                <input matInput placeholder="Invoice Number" id="invoice" [(ngModel)]="invoice"
+                                    autocomplete="off">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <!-- Error Message Display -->
+                        <div *ngIf="manualEntryErrorMessage" class="error-message">{{ manualEntryErrorMessage }}</div>
+                        <div class="hint" role="alert">
+                            <h3>Note : </h3> Leave Retail Price blank for current pricing.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Add Manually Form -->
+
+
+        </div>
+    </div>
+    <!-- Result Table -->
+    <div class="scroll-group col-12 " [hidden]="isShowResultTableDiv">
+        <div class="result-block">
+            <div class="sub-container sub-container__title">
+                <div class="left-block">
+                    <h3>Result</h3>
+                </div>
+                <div class="right-block">
+                    <mat-form-field appearance="outline" class="searchip" subscriptSizing="dynamic">
+                        <input matInput placeholder="Search" [ngModel]="searchText"
+                            (ngModelChange)="applyFilter($event)">
+                        <img [src]="assetUrl + 'search-icon.svg'" alt="">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="responsive-table-wrp">
+                <app-progress-bar></app-progress-bar>
+                <app-skeleton-loader [rowCount]="5"></app-skeleton-loader>
+                <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8"
+                    (matSortChange)="customSort($event)">
+
+                    <!-- SKU Column -->
+                    <ng-container matColumnDef="sku">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> SKU </th>
+                        <td mat-cell *matCellDef="let element">
+                        <span class="label-item">SKU</span>
+                        <button style="cursor: pointer;"
+                        (click)="addSearchEntry(element.sku, element.serialno, element.invoice, element.retail)">{{ element.sku }}</button><br>
+                        <button (click)="toggleExpand($event)" class="btn btn__ico-btn btn__ico-btn__lg btn__expand" 
+                            matTooltip="expand" [matTooltipPosition]="'after'" matTooltipClass="custom-tooltip">
+                            <mat-icon>keyboard_arrow_down</mat-icon>
+                        </button>
+                        </td>
+                    </ng-container>
+
+                    <!-- Date Column -->
+                    <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+                        <td style="cursor: pointer;" mat-cell *matCellDef="let element"><span class="label-item">Date</span> {{element.date |
+                            date:'dd-MM-yyyy'}} </td><!-- |
+                        date:'dd-MM-yyyy'-->
+                    </ng-container>
+
+                    <!-- Description Column -->
+                    <ng-container matColumnDef="description">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
+                        <td style="cursor: pointer;" mat-cell *matCellDef="let element"
+                            (click)="addSearchEntry(element.sku, element.serialno, element.invoice, element.retail)"><span class="label-item" *ngIf="element.description">Description</span>
+                            {{element.description}} </td>
+                    </ng-container>
+
+                    <!-- Serial No. Column -->
+                    <ng-container matColumnDef="serialno">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Serial No. </th>
+                        <td style="cursor: pointer;" mat-cell *matCellDef="let element"
+                            (click)="addSearchEntry(element.sku, element.serialno, element.invoice, element.retail)"><span class="label-item" *ngIf="element.serialno">Serial No.</span>
+                            {{element.serialno}} </td>
+                    </ng-container>
+
+                    <!-- Retail Column -->
+                    <ng-container matColumnDef="retail">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Retail </th>
+                        <td style="cursor: pointer;" mat-cell *matCellDef="let element"
+                            (click)="addSearchEntry(element.sku, element.serialno, element.invoice, element.retail)"><span class="label-item">Retail</span>
+                            {{element.retail | currency:'USD':'symbol':'1.2-2'}} </td>
+                    </ng-container>
+                    
+                    <ng-container *matNoDataRow>
+                        <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+                            <div class="col-12">
+                                <div class="row h-100 w-100 p-3 align-items-center no-data-block">
+                                  <div class="col-12">
+                                    <img src="assets/no-data-icon-sm.svg" alt="">
+                                    <h3>No results</h3>
+                                  </div>
+                                </div>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                
+            </div>
+            <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
+                    aria-label="Select page">
+                </mat-paginator>
+        </div>
+    </div>
+    <!-- End of Result Table -->
+
+    <!-- Button Group -->
+    <div class="col-12 d-flex justify-content-end">
+        <div class="btn-grp">
+            <button type="button" class="btn btn__secondary" (click)="clearFields()"
+                [hidden]="isVisible">Clear</button>
+            <button type="button" class="btn btn__primary" (click)="addManualEntry()" [hidden]="isVisible">Add</button>
+        </div>
+    </div>
+    <!-- End of Button Group -->
+
+</div>
