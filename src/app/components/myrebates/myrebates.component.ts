@@ -33,7 +33,7 @@ const dateComparator = (a: Date | string, b: Date | string): number => {
 export interface RebateTable {
   customerinfo: string;
   datecreated: Date;
-  refno: string;
+  reference_no: string;
   status: string;
   type: string;
   rebate: string;
@@ -47,7 +47,7 @@ export interface RebateTable {
 export class MyrebatesComponent implements AfterViewInit {
   isMobile: boolean = false;
   isTablet: boolean = false;
-  displayedColumns: string[] = ['customerinfo', 'datecreated', 'refno', 'status', 'type', 'rebate', 'action'];
+  displayedColumns: string[] = ['customerinfo', 'datecreated', 'reference_no', 'status', 'type', 'rebate', 'action'];
   allData: any[] = []; // Complete dataset
   filteredData: any[] = []; // Data to be displayed in the table
   totalItems = 0;
@@ -369,7 +369,7 @@ export class MyrebatesComponent implements AfterViewInit {
       console.log("sort.direction - " + isAsc);
       switch (sort.active) {
         case 'customerinfo': return this.compareString(a.customer, b.customer, isAsc);
-        case 'refno': return this.compare_data(a.reference_no, b.reference_no, isAsc);
+        case 'reference_no': return this.compare_data(a.reference_no, b.reference_no, isAsc);
         case 'rebate': return this.compare_data(a.rebate, b.rebate, isAsc);
         case 'datecreated': return this.compare_data(a.datecreated, b.datecreated, isAsc);
         case 'status': return this.compare_data(a.status, b.status, isAsc);

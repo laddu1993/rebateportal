@@ -115,7 +115,7 @@
         </ng-container>
 
         <!-- Ref No Column -->
-        <ng-container matColumnDef="refno">
+        <ng-container matColumnDef="reference_no">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Ref No. </th>
           <td mat-cell *matCellDef="let element">
             <span class="label-item">Ref No. </span>
@@ -152,11 +152,11 @@
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef> </th>
           <td mat-cell *matCellDef="let element; let j = index;">
-            <button *ngIf="selectedToggleValue == 'inprogress' && element.status != 'Submitted'" type="button" class="btn btn__ico-btn btn__ico-btn__sm" matTooltip="Delete"
+            <button *ngIf="selectedToggleValue == 'inprogress' && (element.status != 'Waiting' && element.status != 'Submitted')" type="button" class="btn btn__ico-btn btn__ico-btn__sm" matTooltip="Delete"
               (click)="deleteRebate(j, element.rebate_id, element.customer, element.status )"
               [matTooltipPosition]="'before'" matTooltipClass="custom-tooltip"><img src="assets/remove-icon.svg"
                 class="bt-icon" alt=""></button>
-            <button *ngIf="selectedToggleValue == 'inprogress' && element.status != 'Submitted'" type="button" class="btn btn__remove" matTooltip="Delete"
+            <button *ngIf="selectedToggleValue == 'inprogress' && (element.status != 'Waiting' && element.status != 'Submitted')" type="button" class="btn btn__remove" matTooltip="Delete"
                 (click)="deleteRebate(j, element.rebate_id, element.customer, element.status )"
                 [matTooltipPosition]="'before'" matTooltipClass="custom-tooltip">
                 Delete
