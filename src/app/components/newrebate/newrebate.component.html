@@ -238,7 +238,7 @@
                         (matSortChange)="customSort($event)">
                             <!-- Company Column -->
                             <ng-container matColumnDef="company">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header sticky> Company </th>
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header sticky> Company Name</th>
                                 <td style="cursor: pointer;" mat-cell *matCellDef="let element">
                                     <span class="mobview__firstrow">
                                         <span class="mobview__company__id" *ngIf="selectedRebatePgm !== 'National Account'">
@@ -247,7 +247,7 @@
                                         </span>
                                         <span class="mobview__company__id" *ngIf="selectedRebatePgm === 'National Account'">
                                             <span class="label-item">Branch ID</span>
-                                            <span>{{element.fleet_id}}</span>
+                                            <span>{{element.customer}}</span>
                                         </span>
                                         <span class="mobview__company__city">
                                             <span class="label-item">City</span>

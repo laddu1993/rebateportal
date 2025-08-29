@@ -476,8 +476,18 @@ export class NewrebateComponent implements OnInit{
       inputElement.value = ''; // Clear input value
     }
     if (this.selectedRebatePgm === 'National Account') {
-      this.NatdisplayedColumns = window.innerWidth <= 768 ? ['company', 'fleetid', 'street', 'city', 'state', 'zip'] : ['fleetid', 'street', 'city', 'state', 'zip']; 
+      //alert(selectedOption.national_account_name);
+      if (selectedOption.national_account_name == 'SPREBER FAMILY OF COMPANIES') {
+        // Always show company, regardless of screen size
+        this.NatdisplayedColumns = ['company', 'fleetid', 'street', 'city', 'state', 'zip'];
+      } else {
+        // Normal behavior (hide company on mobile)
+        this.NatdisplayedColumns = window.innerWidth <= 768
+          ? ['fleetid', 'street', 'city', 'state', 'zip']
+          : ['fleetid', 'street', 'city', 'state', 'zip'];
+      }
     } else {
+      // Default for non-National Accounts
       this.NatdisplayedColumns = ['company', 'fleetid', 'street', 'city', 'state', 'zip'];
     }
     // Load customer data
