@@ -14,6 +14,7 @@ export class DataService {
   private fleetID = new BehaviorSubject<string>('');
   private expiration = new BehaviorSubject<string>('');
   private earnedDiscount = new BehaviorSubject<string>('');
+  private customerName = new BehaviorSubject<string>('');
 
   private rebateFilter = new BehaviorSubject<string>('inprogress');
   private rebateFilterType = new BehaviorSubject<string>('');
@@ -28,12 +29,13 @@ export class DataService {
   datafleetID$ = this.fleetID.asObservable();
   dataexpiration$ = this.expiration.asObservable();
   dataearnedDiscount$ = this.earnedDiscount.asObservable();
+  datacustomerName$ = this.customerName.asObservable();
 
   dataRebateFilter$ = this.rebateFilter.asObservable();
   dataRebateFilterType$ = this.rebateFilterType.asObservable();
   dataRebateFilterSearch$ = this.rebateFilterSearch.asObservable();
 
-  setData(rID: string, rStatus: string, company_name: string, customerID: string, childID: string, rebateType: string, fleetID: string, expiration: string, earnedDiscount: string): void {
+  setData(rID: string, rStatus: string, company_name: string, customerID: string, childID: string, rebateType: string, fleetID: string, expiration: string, earnedDiscount: string, customerName: string): void {
     this.rebateID.next(rID);
     this.rebateStatus.next(rStatus);
     this.companyName.next(company_name);
@@ -42,7 +44,8 @@ export class DataService {
     this.rebateType.next(rebateType);   
     this.fleetID.next(fleetID);  
     this.expiration.next(expiration);   
-    this.earnedDiscount.next(earnedDiscount);  
+    this.earnedDiscount.next(earnedDiscount); 
+    this.customerName.next(customerName);  
   }
   /*setSearchData(rFilter: string, rType: string, rSearchText: string){
     this.rebateFilter.next(rFilter);

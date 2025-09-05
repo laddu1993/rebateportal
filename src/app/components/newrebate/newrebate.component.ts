@@ -479,7 +479,7 @@ export class NewrebateComponent implements OnInit{
       //alert(selectedOption.national_account_name);
       if (selectedOption.national_account_name == 'SPREBER FAMILY OF COMPANIES') {
         // Always show company, regardless of screen size
-        this.NatdisplayedColumns = ['company', 'fleetid', 'street', 'city', 'state', 'zip'];
+        this.NatdisplayedColumns = ['fleetid','company', 'street', 'city', 'state', 'zip'];
       } else {
         // Normal behavior (hide company on mobile)
         this.NatdisplayedColumns = window.innerWidth <= 768
@@ -744,7 +744,7 @@ export class NewrebateComponent implements OnInit{
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
   rebateStatus: string = 'NotCurrentlyEnrolled';
-  addRebate(customer_id: string, child_id: string, company_name: string, fleet_id: string, expiration: string, earned_discount: string) {
+  addRebate(customer_id: string, child_id: string, company_name: string, fleet_id: string, expiration: string, earned_discount: string, customerName: string) {
     //console.log("fleet_id" + fleet_id);
     const currentDate = this.datePipe.transform(new Date(), 'MM-dd-yyyy HH:mm:ss')!;
     //console.log('current date', this.datePipe.transform(new Date(), 'MM-dd-yyyy HH:mm:ss')!);
@@ -754,7 +754,7 @@ export class NewrebateComponent implements OnInit{
     if (isExpired === -1 && earned_discount != 'Not Set') {
       this.rebateStatus = earned_discount + "% until " + expiration;
     }
-    this.dataService.setData('0', this.rebateStatus, company_name, customer_id, child_id, this.selectedRebatePgm, fleet_id, expiration, earned_discount);
+    this.dataService.setData('0', this.rebateStatus, company_name, customer_id, child_id, this.selectedRebatePgm, fleet_id, expiration, earned_discount, customerName);
     
     let oauth = this.activatedRoute.snapshot.queryParamMap.get('oauth');
     let acctParam: string;
@@ -895,6 +895,7 @@ export class NewrebateComponent implements OnInit{
       fleet_id: branchName,
       expiration: '12-31-1969',
       discount: '0',
+      customer: ''
     };
 
     const formData = new FormData();
@@ -924,7 +925,8 @@ export class NewrebateComponent implements OnInit{
             dummyCompany.company_name,
             dummyCompany.fleet_id,
             dummyCompany.expiration,
-            dummyCompany.discount
+            dummyCompany.discount,
+            dummyCompany.customer
           );
           // Reset the input fields
           this.dummyCity = '';

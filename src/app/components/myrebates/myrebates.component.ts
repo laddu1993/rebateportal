@@ -98,7 +98,7 @@ export class MyrebatesComponent implements AfterViewInit {
     } else {
       acctParam = this.account;
     }
-    this.dataService.setData(rID, rStatus, '', '', '', '', '', '', '');
+    this.dataService.setData(rID, rStatus, '', '', '', '', '', '', '','');
     // Set up query parameters, including oauth if it exists
     const queryParams: any = {
       acct: acctParam,

@@ -269,7 +269,7 @@
                                 <td style="cursor: pointer;" mat-cell *matCellDef="let element">
                                     <span class="label-item">{{ selectedRebatePgm === 'National Account' ? 'Branch ID' : 'Company ID' }}</span>
                                     <button class="btn__companyID"
-                                            (click)="addRebate(element.customer_id,element.child_id,element.company_name, element.fleet_id, element.expiration, element.discount)">
+                                            (click)="addRebate(element.customer_id,element.child_id,element.company_name, element.fleet_id, element.expiration, element.discount, element.customer)">
                                         {{element.fleet_id}}
                                     </button>
                                 </td>
@@ -279,7 +279,7 @@
                             <ng-container matColumnDef="expiration">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header sticky> Expiration </th>
                                 <td style="cursor: pointer;" mat-cell *matCellDef="let element"
-                                    (click)="addRebate(element.customer_id,element.child_id,element.company_name, element.fleet_id, element.expiration, element.discount)">
+                                    (click)="addRebate(element.customer_id,element.child_id,element.company_name, element.fleet_id, element.expiration, element.discount, element.customer)">
                                     <span class="label-item">Expiration</span>
                                     {{element.expiration}}
                                 </td>
@@ -298,7 +298,7 @@
                             <ng-container matColumnDef="city">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header sticky> City </th>
                                 <td style="cursor: pointer;" mat-cell *matCellDef="let element"
-                                    (click)="addRebate(element.customer_id,element.child_id,element.company_name, element.fleet_id, element.expiration, element.discount)" class="element__mobile-hide">
+                                    (click)="addRebate(element.customer_id,element.child_id,element.company_name, element.fleet_id, element.expiration, element.discount, element.customer)" class="element__mobile-hide">
                                     <span class="label-item">City</span>
                                     {{element.city}}
                                 </td>
@@ -625,7 +625,7 @@
                             <td style="cursor: pointer;" mat-cell *matCellDef="let element">
                                 <span class="label-item">Company ID</span>
                                 <button class="btn__companyID"
-                                        (click)="addRebate(element.customer_id,element.child_id,element.company_name, element.fleet_id, element.expiration, element.discount)">
+                                        (click)="addRebate(element.customer_id,element.child_id,element.company_name, element.fleet_id, element.expiration, element.discount, element.customer)">
                                     {{element.fleet_id}}
                                 </button>
                             </td>
@@ -634,7 +634,7 @@
                         <ng-container matColumnDef="expiration">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Expiration </th>
                             <td style="cursor: pointer;" mat-cell *matCellDef="let element"
-                                (click)="addRebate(element.customer_id,element.child_id,element.company_name, element.fleet_id, element.expiration, element.discount)">
+                                (click)="addRebate(element.customer_id,element.child_id,element.company_name, element.fleet_id, element.expiration, element.discount, element.customer)">
                                 <span class="label-item">Expiration</span>
                                 {{element.expiration}}
                             </td>
@@ -643,7 +643,7 @@
                         <ng-container matColumnDef="city">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> City </th>
                             <td style="cursor: pointer;" mat-cell *matCellDef="let element"
-                                (click)="addRebate(element.customer_id,element.child_id,element.company_name, element.fleet_id, element.expiration, element.discount)" class="element__mobile-hide">
+                                (click)="addRebate(element.customer_id,element.child_id,element.company_name, element.fleet_id, element.expiration, element.discount, element.customer)" class="element__mobile-hide">
                                 <span class="label-item">City</span>
                                 {{element.city}}
                             </td>

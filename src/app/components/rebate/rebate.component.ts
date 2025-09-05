@@ -59,6 +59,7 @@ export class RebateComponent implements OnInit {
   currentRebateID: string = '';
   FleetIdRowId: string = '';
   customerName: string = '';
+  SpreberCustomerName: string = '';
   customerID: string = '';
   totalRebate: any;
   totalPoints: any;
@@ -75,6 +76,7 @@ export class RebateComponent implements OnInit {
   dataRebateID: string = '';
   dataRebateStatus: string = '';
   datacompanyName: string = '';
+  datacustomerName: string = '';
   datacustomerID: string = '';
   datachildID: string = '';
   datarebateType: string = '';
@@ -400,6 +402,9 @@ export class RebateComponent implements OnInit {
     this.dataService.dataearnedDiscount$.subscribe(data => {
       this.dataearnedDiscount = data;
     });
+    this.dataService.datacustomerName$.subscribe(data => {
+      this.datacustomerName = data;
+    });
     this.account = this.acctService.getAccount();
     this.cc = 'USF';
     this.activatedRoute.queryParams.subscribe(params => {
@@ -432,6 +437,9 @@ export class RebateComponent implements OnInit {
       this.totalRebate = 0;
       this.rebateSatus = this.dataRebateStatus;
       this.customerName = this.datacompanyName;
+      if (String(this.datafleetID).startsWith('SPR')) {
+        this.SpreberCustomerName = this.datacustomerName;
+      }
       this.customerID = this.datacustomerID;
       this.rebateType = this.datarebateType;
       this.fleetID = this.datafleetID;

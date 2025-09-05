@@ -14,6 +14,7 @@
                     <h1>{{customerName}} [{{fleetID}}]</h1>
                     <span class="status status__{{statusStyleClass}}" *ngIf="rebateType !== 'National Account'">{{rebateSatus == 'NotCurrentlyEnrolled' ? 'Not Currently Enrolled' : rebateSatus}}</span>
                 </div>
+                <h3 *ngIf="SpreberCustomerName">{{ SpreberCustomerName }}</h3>
                 <h4>{{rebateType}}</h4>
             </div>
             <div class="btn-grp">

@@ -5,7 +5,7 @@ let prodApiBaseUrl = '';
 
 if (hostname === 'localhost') {
   // Localhost dev URLs
-  uatApiBaseUrl = 'http://localhost/uat_rebate_portal/api/rest/v1.0/';
+  uatApiBaseUrl = 'https://crmapps.husqvarnagroup.com/uat_rebate_portal/api/rest/v1.0/';
   prodApiBaseUrl = 'http://localhost/rebate_portal/api/rest/v1.0/';
 } else if (hostname.includes('crmapps-tst.husqvarnagroup.com')) {
   // UAT environment on Husqvarna servers
