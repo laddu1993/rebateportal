@@ -746,6 +746,9 @@ export class NewrebateComponent implements OnInit{
   rebateStatus: string = 'NotCurrentlyEnrolled';
   addRebate(customer_id: string, child_id: string, company_name: string, fleet_id: string, expiration: string, earned_discount: string, customerName: string) {
     //console.log("fleet_id" + fleet_id);
+    if (String(fleet_id).startsWith('SPR')) {
+      this.accountService.setBranchId(fleet_id);
+    }
     const currentDate = this.datePipe.transform(new Date(), 'MM-dd-yyyy HH:mm:ss')!;
     //console.log('current date', this.datePipe.transform(new Date(), 'MM-dd-yyyy HH:mm:ss')!);
     const isExpired = this.compare(new Date(expiration), new Date(currentDate), false);
