@@ -477,7 +477,7 @@ export class NewrebateComponent implements OnInit{
     }
     if (this.selectedRebatePgm === 'National Account') {
       //alert(selectedOption.national_account_name);
-      if (selectedOption.national_account_name == 'SPREBER FAMILY OF COMPANIES') {
+      if (selectedOption.national_account_name == 'SPREBER FAMILY OF COMPANIES' || 'LandCare') {
         // Always show company, regardless of screen size
         this.NatdisplayedColumns = ['fleetid','company', 'street', 'city', 'state', 'zip'];
       } else {
