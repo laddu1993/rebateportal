@@ -748,6 +748,8 @@ export class NewrebateComponent implements OnInit{
     //console.log("fleet_id" + fleet_id);
     if (String(fleet_id).startsWith('SPR')) {
       this.accountService.setBranchId(fleet_id);
+    }else{
+      this.accountService.setBranchId(fleet_id);
     }
     const currentDate = this.datePipe.transform(new Date(), 'MM-dd-yyyy HH:mm:ss')!;
     //console.log('current date', this.datePipe.transform(new Date(), 'MM-dd-yyyy HH:mm:ss')!);
